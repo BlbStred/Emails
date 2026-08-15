@@ -3,6 +3,13 @@
 *#
 .#*
 
+
+# Email specific
+*.txt
+*.json
+SocialEmailsAgent.py
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
