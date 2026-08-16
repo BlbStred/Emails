@@ -67,13 +67,19 @@ gmailService = get_gmail_service() # To access gmail
 
 
 def getEmailList(category, ignoreIdList):
-    messages = []   # accumulates all the pages
+    messages = []   # accumulates all the pages, which google provides page by page
+
+    # The function list(..., pageToken=pageToken) below takes a pageToken as argument.
+    # It provides the next page of emails to list.
+    # If it is None then it indicates the first page.
+    # list() sets it to the next page, which is None for the last page.
     pageToken = None # ...list(...,pageToken=pageToken) will set it to non-None when finished
+    
     while True:
         # List messages (Gmail returns these in reverse chronological order by default)
         results = gmailService.users().messages().list(userId='me',
-                                                       q=f"label:yihsin",
-                                                       maxResults=100,
+                                                       q=f"label:yihsin",  # query
+                                                       maxResults=100,     # max results returned
                                                        pageToken=pageToken).execute()
         messages.extend(results.get('messages', []))
         
@@ -82,7 +88,7 @@ def getEmailList(category, ignoreIdList):
         if not pageToken:
             break
     
-    print(len(messages), "messages")
+    # Parse the messages into my EmailMessages
     
     emailList = []          # the list to return
     for msg in messages:
