@@ -13,20 +13,17 @@
 
 
 
-import os
+
 import re
 import os.path
 import sys
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
 from openai import OpenAI
 from dotenv import load_dotenv # run 'pip install python-dotenv'
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import EmailMessage
+import GmailService
 
 # Load environment variables from .env
 load_dotenv()
@@ -41,30 +38,15 @@ sys.stdout.reconfigure(errors='replace')
 #######################################
         
 
-def get_gmail_service():
-    
-    # If modifying these scopes, delete the file token.json.
-    SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
-    creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-    return build('gmail', 'v1', credentials=creds)
+s = GmailService.GmailService()
+gmailService = s.service() # To access gmail
 
-
-
-gmailService = get_gmail_service() # To access gmail
 
 
 import base64
+
+
 
 def get_message_body(payload):
     """
@@ -115,7 +97,7 @@ def get_message_body(payload):
 
 
 def getEmailList(category, ignoreIdList):
-    messages = []   # accumulates all the pages, which google provides page by page
+    messages = s.emailList(category)
 
     # The function list(..., pageToken=pageToken) below takes a pageToken as argument.
     # It provides the next page of emails to list.
@@ -178,6 +160,36 @@ def getEmailIdList(category):
         emailList.append(msg['id'])
 
     return emailList
+
+
+
+
+class EmailId:
+
+    primaryIds = getEmailIdList("primary")
+    
+    def __init__(self, category):
+        self.prevId   = None                       # the most recent id already processed previously
+        self.fileName = "latest_"+category+".txt"  # where saved
+
+    # First time processed() invoked, it will be with the most recent emailId
+    # Save the previous one from fileName in self.prevId
+    # Store that new given emailId in the file
+
+    def processed(self, emailId):
+        if self.prevId == None:
+            # first time processed() called, whuch is the most recent id
+            # remember it, and record it in file
+            try:
+                with open(self.fileName, "r") as file:
+                    self.prevId = file.readline().split()[0]
+            except:
+                self.prevId     = ""        
+
+            with open(self.fileName, "w") as file:
+                file.write(emailId + " is the most recent email id already processed")
+            
+        return emailId == self.prevId
 
 
 
