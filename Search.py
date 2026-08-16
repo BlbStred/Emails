@@ -26,6 +26,7 @@ from dotenv import load_dotenv # run 'pip install python-dotenv'
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import EmailMessage
 
 # Load environment variables from .env
 load_dotenv()
@@ -159,7 +160,7 @@ def getEmailList(category, ignoreIdList):
         date    = next((h['value'] for h in headers if h['name'] == 'Date'),    'Unknown Date')
         date    = re.split(r'[+-]', date)[0]     # Get rid of the universal time at the end
 
-        emailList.append(EmailMessage(msgId, sender, subject, date, category, body))
+        emailList.append(EmailMessage.EmailMessage(msgId, sender, subject, date, category, body))
 
     return emailList
 
@@ -184,55 +185,6 @@ def getEmailIdList(category):
 #######################################
 # MY SERVICES
 #######################################
-
-class EmailMessage:
-    def __init__(self, id, sender, subject, date, category, body):
-        self.id      = str(id)
-        self.sender  = str(sender)
-        self.subject = str(subject)
-        self.date    = str(date)
-        self.category= str(category)
-        self.body    = str(body)                        
-
-    def __str__(self):
-        result  =                self.id
-        result += " from: "    + self.sender
-        result += " subject: " + self.subject
-        result += " date0: "   + self.date
-        result += " in: "      + self.category
-        result += " body: "    + self.body                        
-        return result
-
-
-
-class EmailId:
-
-    primaryIds = getEmailIdList("primary")
-    
-    def __init__(self, category):
-        self.prevId   = None                       # the most recent id already processed previously
-        self.fileName = "latest_"+category+".txt"  # where saved
-
-    # First time processed() invoked, it will be with the most recent emailId
-    # Save the previous one from fileName in self.prevId
-    # Store that new given emailId in the file
-
-    def processed(self, emailId):
-        if self.prevId == None:
-            # first time processed() called, whuch is the most recent id
-            # remember it, and record it in file
-            try:
-                with open(self.fileName, "r") as file:
-                    self.prevId = file.readline().split()[0]
-            except:
-                self.prevId     = ""        
-
-            with open(self.fileName, "w") as file:
-                file.write(emailId + " is the most recent email id already processed")
-            
-        return emailId == self.prevId
-
-        
 
 
 
