@@ -70,18 +70,15 @@ def getEmailList(category, ignoreIdList):
     
     # List messages (Gmail returns these in reverse chronological order by default)
     results = gmailService.users().messages().list(userId='me',
-                                                   q=f"category:{category} label:inbox").execute()
+                                                   q=f"label:yihsin").execute()
     messages = results.get('messages', [])
-
+    print(len(messages), "messages")
+    
     emailList = []          # the list to return
     for msg in messages:
         # Check whether precessed previously
         msgId = msg['id']
 
-        if msgId in ignoreIdList:
-            continue
-
-        if idService[category].processed(msgId): break          # reached as far as last time
                 
         # msg provides id only, fetch full message details
         message = gmailService.users().messages().get(userId='me', id=msgId).execute()
@@ -276,72 +273,6 @@ def socialEmails(emailList, relevance):
 
 
     
-
-#######################################
-# REAL ESTATE
-#######################################
-# OpenAI unwilling to check websites
-
-
-def changesAtWP(prev):
-    
-    try:
-        # The Request
-        response = aiService.chat.completions.create(
-            model="gpt-4o",
-            seed=42,         # for determinism
-            temperature=0,   # otherwise makes wrong decision with no reason
-            messages=[
-                
-                {"role"    : "system",
-                 "content" : """You are a real estate agent at Windward Passage, Kailua, HI.
-                 You obtain information from the web, and list the web pages consulted.
-                 You respond with the status of apartments on the market there.
-                 The status of an apartment on the market is:
-                 asking price, whether it is contingent, and whether it has an open house.
-                 Answer 'NO CHANGE' if there is no change since your last reponse.
-                 Otherwise list the changes, and provide the status of all the apartments on the market."""
-                 },
-                {"role" : "assistant",
-                 "content" : prev
-                 },
-                
-                {"role": "user",
-                 "content": "status of apartments for sale at Windward Passage, Kailua, HI"
-                 }
-            ]
-        )
-        
-        result = response.choices[0].message.content
-        print(result)
-        return result
-
-    except Exception as e:
-        # This catches API errors, connection issues, or encoding bugs
-        print(f"*** ERROR *** : {e}")
-        return 'ERROR'
-
-    
-    
-
-
-def apartments():
-    prev = "NO CHANGE"
-    response = changesAtWP(prev)
-    
-    return (
-        f"""
-        <html>
-          <body>
-            Changes at Windward Passage:<br>
-            {response}
-            </p>
-          </body>
-        </html>
-        """
-    )
-
-
 #######################################
 # COMMON
 #######################################
@@ -381,19 +312,16 @@ if __name__ == '__main__':
 
     idService  = {"promotions" : EmailId("promotions"),  # To check if email id previously processed
                   "social"     : EmailId("social"),
+                  "primary"    : EmailId("primary"),                  
                   "updates"    : EmailId("updates")}
     
-    ignore = getEmailIdList('primary')
-    emails =  (getEmailList('promotions', ignore) +
-               getEmailList('social',     ignore) +
-               getEmailList('updates',    ignore))
-    
+    ignore = []
+    emails =  getEmailList('primary', ignore)
+    """
     sendEmail("Social emails",
               socialEmails(emails, relevance))
-    
+    """
 
-    # Disabled because OpenAI will consult the web
-    """
-    sendEmail("Windward passage apartments",
-              apartments())
-    """
+    
+    for e in emails:
+        print(e.subject)
