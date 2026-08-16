@@ -67,11 +67,21 @@ gmailService = get_gmail_service() # To access gmail
 
 
 def getEmailList(category, ignoreIdList):
+    messages = []   # accumulates all the pages
+    pageToken = None # ...list(...,pageToken=pageToken) will set it to non-None when finished
+    while True:
+        # List messages (Gmail returns these in reverse chronological order by default)
+        results = gmailService.users().messages().list(userId='me',
+                                                       q=f"label:yihsin",
+                                                       maxResults=100,
+                                                       pageToken=pageToken).execute()
+        messages.extend(results.get('messages', []))
+        
+        # Check if another page exists
+        pageToken = results.get('nextPageToken')
+        if not pageToken:
+            break
     
-    # List messages (Gmail returns these in reverse chronological order by default)
-    results = gmailService.users().messages().list(userId='me',
-                                                   q=f"label:yihsin").execute()
-    messages = results.get('messages', [])
     print(len(messages), "messages")
     
     emailList = []          # the list to return
@@ -324,4 +334,5 @@ if __name__ == '__main__':
 
     
     for e in emails:
-        print(e.subject)
+        if "Watch" not in e.subject:
+            print(e.subject)
