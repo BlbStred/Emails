@@ -1,13 +1,29 @@
+# When gmail autorization expires:
+#
+# 1 regenerate token.json
+# 1.1 delete token.json
+# 1.2 python SocialEmailsAgent.py
+# 1.3 Google will open a warning window
+# 1.4 Do not go to safety -- click on "advanced"
+# 1.5 Do what they label as unsafe
+#
+# 2. regenerate MY_GMAIL_APP_PASSWORD in .env
+# 2.1 go to myaccount.google.com/apppasswords
+
 import os
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from dotenv import load_dotenv # run 'pip install python-dotenv'
 
 class GmailService:
     
     def __init__(self):
         
+        # Load environment variables from .env
+        load_dotenv()
+
         # If modifying these scopes, delete the file token.json.
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
