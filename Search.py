@@ -96,8 +96,8 @@ def get_message_body(payload):
     return bodies
 
 
-def getEmailList(category, ignoreIdList):
-    messages = s.emailList(category)
+def getEmailList(category, label, ignoreIdList):
+    messages = s.emailList(category, label)
     
     emailList = []          # the list to return
     for msg in messages:
@@ -327,7 +327,7 @@ if __name__ == '__main__':
                   "updates"    : EmailId("updates")}
     
     ignore = []
-    emails =  getEmailList('primary', ignore)
+    emails =  getEmailList('', 'yihsin', ignore)
     """
     sendEmail("Social emails",
               socialEmails(emails, relevance))

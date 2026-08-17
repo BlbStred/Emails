@@ -32,7 +32,12 @@ class GmailService:
 
     
 
-    def emailList(self, category):
+    def emailList(self, category, label):
+        
+        query = ""
+        if category != "": query += f"category:{category} "
+        if label    != "": query += f"label:{label} "
+        
         messages = []   # accumulates all the pages, which google provides page by page
 
         # The function list(..., pageToken=pageToken) below takes a pageToken as argument.
@@ -44,7 +49,7 @@ class GmailService:
         while True:
             # List messages (Gmail returns these in reverse chronological order by default)
             results = self.serv.users().messages().list(userId='me',
-                                                        q=f"label:yihsin",  # query
+                                                        q=query,
                                                         maxResults=100,     # max results returned
                                                         pageToken=pageToken).execute()
             messages.extend(results.get('messages', []))
