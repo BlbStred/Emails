@@ -61,7 +61,7 @@ class GmailService:
 
     
 
-    def messages(self, category, label):
+    def rawMessages(self, category, label):
         
         query = ""
         if category != "": query += f"category:{category} "
