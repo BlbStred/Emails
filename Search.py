@@ -4,11 +4,8 @@
 
 
 
-import os.path
+
 import sys
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import EmailMessage
 import GmailService
 
