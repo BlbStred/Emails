@@ -1,3 +1,6 @@
+# This file understands how to log into gmail
+# and extract a list of messages.
+
 # Requires
 # - environment variable settings in .env
 # - credentials.json (which can generate token.json)
@@ -32,20 +35,25 @@ class GmailService:
         # If modifying these scopes, delete the file token.json.
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
-        self.creds = None
+        # Try to create creds from token.json
+        creds = None
         if os.path.exists('token.json'):
-            self.creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-            
-        if not self.creds or not self.creds.valid:
-            if self.creds and self.creds.expired and self.creds.refresh_token:
-                self.creds.refresh(Request())
+            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+
+        # If failed to create creds from token.json then
+        # create them from credentials.json and write the result into token.json
+        # for future use
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-                self.creds = flow.run_local_server(port=0)
+                creds = flow.run_local_server(port=0)
             with open('token.json', 'w') as token:
-                token.write(self.creds.to_json())
+                token.write(creds.to_json())
 
-        self.serv = build('gmail', 'v1', credentials=self.creds)
+        # the result is a service object
+        self.serv = build('gmail', 'v1', credentials=creds)
        
                 
     def messagesObject(self):
