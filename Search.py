@@ -18,7 +18,7 @@ if __name__ == '__main__':
     
     ignore = []
     emails =  EmailMessage.getEmailList(gmailService,
-                                        gmailService.emailList('', 'yihsin'), ignore)
+                                        gmailService.messages('', 'yihsin'), ignore)
        
     for e in emails:
         if "Watch" not in e.subject:

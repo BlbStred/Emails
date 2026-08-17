@@ -1,3 +1,8 @@
+# Requires
+# - environment variable settings in .env
+# - credentials.json (which can generate token.json)
+
+
 # When gmail autorization expires:
 #
 # 1 regenerate token.json
@@ -43,12 +48,12 @@ class GmailService:
         self.serv = build('gmail', 'v1', credentials=self.creds)
        
                 
-    def service(self):
-        return self.serv
+    def messagesObject(self):
+        return self.serv.users().messages()
 
     
 
-    def emailList(self, category, label):
+    def messages(self, category, label):
         
         query = ""
         if category != "": query += f"category:{category} "
@@ -64,10 +69,10 @@ class GmailService:
         
         while True:
             # List messages (Gmail returns these in reverse chronological order by default)
-            results = self.serv.users().messages().list(userId='me',
-                                                        q=query,
-                                                        maxResults=100,     # max results returned
-                                                        pageToken=pageToken).execute()
+            results = self.messagesObject().list(userId='me',
+                                                 q=query,
+                                                 maxResults=100,     # max results returned
+                                                 pageToken=pageToken).execute()
             messages.extend(results.get('messages', []))
             
             # Check if another page exists
