@@ -127,55 +127,6 @@ def getEmailList(category, label, ignoreIdList):
 
 
 
-def getEmailIdList(category, label):
-    
-    # List messages (Gmail returns these in reverse chronological order by default)
-    messages = s.emailList(category, label)
-                                                 
-    
-    emailList = []          # the list to return
-    for msg in messages:
-        emailList.append(msg['id'])
-
-    return emailList
-
-
-
-
-class EmailId:
-
-    primaryIds = getEmailIdList("primary", "inbox")
-    
-    def __init__(self, category):
-        self.prevId   = None                       # the most recent id already processed previously
-        self.fileName = "latest_"+category+".txt"  # where saved
-
-    # First time processed() invoked, it will be with the most recent emailId
-    # Save the previous one from fileName in self.prevId
-    # Store that new given emailId in the file
-
-    def processed(self, emailId):
-        if self.prevId == None:
-            # first time processed() called, whuch is the most recent id
-            # remember it, and record it in file
-            try:
-                with open(self.fileName, "r") as file:
-                    self.prevId = file.readline().split()[0]
-            except:
-                self.prevId     = ""        
-
-            with open(self.fileName, "w") as file:
-                file.write(emailId + " is the most recent email id already processed")
-            
-        return emailId == self.prevId
-
-
-
-
-#######################################
-# MY SERVICES
-#######################################
-
 
 
 #######################################
@@ -319,19 +270,10 @@ def sendEmail(subject, body):
 
 if __name__ == '__main__':
 
-    idService  = {"promotions" : EmailId("promotions"),  # To check if email id previously processed
-                  "social"     : EmailId("social"),
-                  "primary"    : EmailId("primary"),                  
-                  "updates"    : EmailId("updates")}
-    
+   
     ignore = []
     emails =  getEmailList('', 'yihsin', ignore)
-    """
-    sendEmail("Social emails",
-              socialEmails(emails, relevance))
-    """
-
-    
+       
     for e in emails:
         if "Watch" not in e.subject:
             print("\n\n", e, flush=True)
