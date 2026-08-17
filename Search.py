@@ -127,14 +127,12 @@ def getEmailList(category, label, ignoreIdList):
 
 
 
-def getEmailIdList(category):
+def getEmailIdList(category, label):
     
     # List messages (Gmail returns these in reverse chronological order by default)
-    results = gmailService.users().messages().list(userId='me',
-                                                   q=f"category:{category} label:inbox").execute()
+    messages = s.emailList(category, label)
+                                                 
     
-    messages = results.get('messages', [])
-
     emailList = []          # the list to return
     for msg in messages:
         emailList.append(msg['id'])
@@ -146,7 +144,7 @@ def getEmailIdList(category):
 
 class EmailId:
 
-    primaryIds = getEmailIdList("primary")
+    primaryIds = getEmailIdList("primary", "inbox")
     
     def __init__(self, category):
         self.prevId   = None                       # the most recent id already processed previously
