@@ -13,33 +13,17 @@ import EmailMessage
 import GmailService
 
 
-# Reconfigure stdout to handle errors gracefully
+# Reconfigure stdout to handle replace unprintable character with something like '?'
+# instead of crashing
 sys.stdout.reconfigure(errors='replace')
 
-
-
-#######################################
-# GMAIL SERVICES
-#######################################
-        
-
-
-s = GmailService.GmailService()
-gmailService = s.service() # To access gmail
-
-
-
-
-
-
-
-    
-    
 if __name__ == '__main__':
-
    
+    gmailService = GmailService.GmailService()
+    
     ignore = []
-    emails =  EmailMessage.getEmailList(gmailService, s.emailList('', 'yihsin'), ignore)
+    emails =  EmailMessage.getEmailList(gmailService,
+                                        gmailService.emailList('', 'yihsin'), ignore)
        
     for e in emails:
         if "Watch" not in e.subject:

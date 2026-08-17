@@ -96,7 +96,7 @@ def getEmailList(gmailService, messages, ignoreIdList):
         
                 
         # msg provides id only, fetch full message details
-        message = gmailService.users().messages().get(userId='me', id=msgId).execute()
+        message = gmailService.service().users().messages().get(userId='me', id=msgId).execute()
         
         # Extract headers 
         payload = message.get('payload', {})
