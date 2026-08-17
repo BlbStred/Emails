@@ -98,27 +98,6 @@ def get_message_body(payload):
 
 def getEmailList(category, ignoreIdList):
     messages = s.emailList(category)
-
-    # The function list(..., pageToken=pageToken) below takes a pageToken as argument.
-    # It provides the next page of emails to list.
-    # If it is None then it indicates the first page.
-    # list() sets it to the next page, which is None for the last page.
-    pageToken = None # ...list(...,pageToken=pageToken) will set it to non-None when finished
-    
-    while True:
-        # List messages (Gmail returns these in reverse chronological order by default)
-        results = gmailService.users().messages().list(userId='me',
-                                                       q=f"label:yihsin",  # query
-                                                       maxResults=100,     # max results returned
-                                                       pageToken=pageToken).execute()
-        messages.extend(results.get('messages', []))
-        
-        # Check if another page exists
-        pageToken = results.get('nextPageToken')
-        if not pageToken:
-            break
-    
-    # Parse the messages into my EmailMessages
     
     emailList = []          # the list to return
     for msg in messages:
@@ -153,6 +132,7 @@ def getEmailIdList(category):
     # List messages (Gmail returns these in reverse chronological order by default)
     results = gmailService.users().messages().list(userId='me',
                                                    q=f"category:{category} label:inbox").execute()
+    
     messages = results.get('messages', [])
 
     emailList = []          # the list to return
