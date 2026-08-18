@@ -1,3 +1,6 @@
+# This file understands how information is stored in Gmail raw messages.
+# It parses them and puts information of interest into ParsedMessage
+
 
 import re
 import base64
@@ -88,22 +91,20 @@ def get_message_body(payload):
 
 
 def parse(gmailService, rawMessages, ignoreIdList):
-    
-    
-    emailList = []          # the list to return
-    for msg in rawMessages:
-        # Check whether precessed previously
-        msgId = msg['id']
         
-                
-        # msg provides id only, fetch full message details
-        message = gmailService.messagesObject().get(userId='me', id=msgId).execute()
+    parsedMessages = []          # the list to return
+    for rawMessage in rawMessages:
+        # Each rawMessage has just a dict with keys id and threadId
+        # realMessage can be obtained from those
+        
+        msgId = rawMessage['id']
+        realMessage = gmailService.messagesObject().get(userId='me', id=msgId).execute()
         
         # Extract headers 
-        payload = message.get('payload', {})
+        payload = realMessage.get('payload', {})  
         headers = payload.get('headers', [])
 
-        body = get_message_body(payload)['plain']
+        body = get_message_body(payload)['plain'] # Plaintext repn of body
         
         # headers is a list of dictionaries {'name: ..., 'value': ...}
         # To get the subject, for example, find the first dictionary {'name: 'Subject', 'value': ...}
@@ -112,7 +113,7 @@ def parse(gmailService, rawMessages, ignoreIdList):
         date    = next((h['value'] for h in headers if h['name'] == 'Date'),    'Unknown Date')
         date    = re.split(r'[+-]', date)[0]     # Get rid of the universal time at the end
 
-        emailList.append(ParsedMessage(msgId, sender, subject, date,
-                                       get_message_category(message), body))
+        parsedMessages.append(ParsedMessage(msgId, sender, subject, date,
+                                            get_message_category(realMessage), body))
 
-    return emailList
+    return parsedMessages
