@@ -22,4 +22,4 @@ if __name__ == '__main__':
        
     for e in emails:
         if "Watch" not in e.subject:
-            print("\n\n", e, flush=True)
+            print("\n", e, flush=True)

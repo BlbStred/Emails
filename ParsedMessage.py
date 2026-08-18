@@ -16,11 +16,11 @@ class ParsedMessage:
 
     def __str__(self):
         result  =                self.id
-        result += " from: "    + self.sender
-        result += " subject: " + self.subject
-        result += " date0: "   + self.date
-        result += " in: "      + self.category
-        result += " body: "    + self.body                        
+        result += "\nfrom:    " + self.sender
+        result += "\nsubject: " + self.subject
+        result += "\ndate:    " + self.date
+        result += "\nin:      " + self.category
+        result += "\nbody:    " + self.body                        
         return result
 
     

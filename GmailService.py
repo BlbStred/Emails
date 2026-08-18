@@ -18,6 +18,16 @@
 # 2. regenerate MY_GMAIL_APP_PASSWORD in .env
 # 2.1 go to myaccount.google.com/apppasswords
 
+"""
+Possible categories
+CATEGORY_PERSONAL (maps to Primary)
+CATEGORY_PROMOTIONS
+CATEGORY_SOCIAL
+CATEGORY_UPDATES
+CATEGORY_FORUMS
+"""
+
+
 import os
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
