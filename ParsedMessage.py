@@ -2,7 +2,7 @@
 import re
 import base64
 
-class EmailMessage:
+class ParsedMessage:
     def __init__(self, id, sender, subject, date, category, body):
         self.id      = str(id)
         self.sender  = str(sender)
@@ -20,6 +20,7 @@ class EmailMessage:
         result += " body: "    + self.body                        
         return result
 
+    
 def get_message_category(message_obj: dict) -> str:
     """
     Extracts the category name from a Gmail API message resource.
@@ -86,11 +87,11 @@ def get_message_body(payload):
     return bodies
 
 
-def getEmailList(gmailService, messages, ignoreIdList):
+def parse(gmailService, rawMessages, ignoreIdList):
     
     
     emailList = []          # the list to return
-    for msg in messages:
+    for msg in rawMessages:
         # Check whether precessed previously
         msgId = msg['id']
         
@@ -111,7 +112,7 @@ def getEmailList(gmailService, messages, ignoreIdList):
         date    = next((h['value'] for h in headers if h['name'] == 'Date'),    'Unknown Date')
         date    = re.split(r'[+-]', date)[0]     # Get rid of the universal time at the end
 
-        emailList.append(EmailMessage(msgId, sender, subject, date,
-                                      get_message_category(message), body))
+        emailList.append(ParsedMessage(msgId, sender, subject, date,
+                                       get_message_category(message), body))
 
     return emailList

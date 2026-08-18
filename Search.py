@@ -1,6 +1,6 @@
 import sys
-import EmailMessage
 import GmailService
+import ParsedMessage
 from pathlib import Path
 
 commonDir = "C:\\Users\\Dan\\Documents\\Computing\\common"
@@ -17,8 +17,8 @@ if __name__ == '__main__':
     gmailService = GmailService.GmailService()
     
     ignore = []
-    emails =  EmailMessage.getEmailList(gmailService,
-                                        gmailService.rawMessages('', 'yihsin'), ignore)
+    emails =  ParsedMessage.parse(gmailService,
+                                  gmailService.rawMessages('', 'yihsin'), ignore)
        
     for e in emails:
         if "Watch" not in e.subject:
