@@ -12,8 +12,8 @@ class ParsedMessage:
         self.subject     = str(subject)
         self.date        = str(date)
         self.category    = str(category)
-        self.bodies      = bodies
-        self.attachments = attachments                            
+        self.bodies      = bodies         # list of plain text
+        self.attachments = attachments    # list of file names attached
 
     def __str__(self):
         result  =                self.id
@@ -31,14 +31,14 @@ class ParsedMessage:
         return result
 
     
-def get_message_category(message_obj: dict) -> str:
-    """
-    Extracts the category name from a Gmail API message resource.
-    
-    :param message_obj: Dictionary representing the Gmail Message resource.
-    :return: Friendly category name (e.g., 'Updates', 'Promotions', 'Personal').
-    """
-    labels = message_obj.get("labelIds", [])
+# RealMessage is a dictionary with keywords like
+# payload: what is seen by user
+# labelIds: meta data including category
+# A category is given by a string starting with CATEGORY_
+# It returns friendly category name (e.g., 'Updates', 'Promotions', 'Personal').
+
+def getCategory(realMessage: dict) -> str:
+    labels = realMessage.get("labelIds", [])
     
     for label in labels:
         if label.startswith("CATEGORY_"):
@@ -126,7 +126,7 @@ def parse(gmailService, rawMessages, ignoreIdList):
         date    = re.split(r'[+-]', date)[0]     # Get rid of the universal time at the end
 
         parsedMessages.append(ParsedMessage(msgId, sender, subject, date,
-                                            get_message_category(realMessage),
+                                            getCategory(realMessage),
                                             bodies, attachments))
                                             
 
