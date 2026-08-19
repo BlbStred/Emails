@@ -68,18 +68,19 @@ def parsePartOrPayload(x, bodies, attachments):
    
     
     
-# If any part contains plain text return that,
-# otherwise return None
-def parse_parts(parts, bodies, attachments):
-    # parts is a list.
-    # If any part in the list contains a body records the plain text portion
+# To the list bodies append any bodies in the list parts, and
+# to the list attachments append any file names attached
+
+def parseParts(parts, bodies, attachments):
+    # parts is a list of dictionaries
+    # If any part in the list contains a body, appends the body to bodies,
+    # If any part in the list contains an attachment, appends the file name to attachments
     # If a part has a list of parts itself, recurse
     for part in parts:
         parsePartOrPayload(part, bodies, attachments)
         
         # Recursively handle nested multi-part structures
-        if 'parts' in part:
-            parse_parts(part['parts'], bodies, attachments)
+        parseParts(part.get('parts', []), bodies, attachments)
             
 
 # Returns a pair of bodies and attachments found in payload                
@@ -91,7 +92,7 @@ def getBodiesAttachments(payload):
     parsePartOrPayload(payload, bodies, attachments)
             
     # Multi-Part Message (e.g., multipart/alternative, multipart/mixed)
-    parse_parts(payload.get('parts', {}), bodies, attachments)
+    parseParts(payload.get('parts', []), bodies, attachments)
             
     return (bodies, attachments)
 
