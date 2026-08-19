@@ -82,23 +82,17 @@ def parse_parts(parts, bodies, attachments):
             parse_parts(part['parts'], bodies, attachments)
             
 
-                
-def get_message_body(payload):
-    """
-    Extracts text/plain or text/html body from a full Gmail API message object.
-    Returns a dict: {'plain': str, 'html': str}
-    """
+# Returns a pair of bodies and attachments found in payload                
+def getBodiesAttachments(payload):
     bodies      = []
     attachments = []
-    # 1. Simple Single-Part Message
     
-    if 'data' in payload.get('body', {}):
-        parsePartOrPayload(payload, bodies, attachments)
-
-    # 2. Multi-Part Message (e.g., multipart/alternative, multipart/mixed)
-    if 'parts' in payload:
-        parse_parts(payload['parts'], bodies, attachments)
-
+    # Single-Part Message
+    parsePartOrPayload(payload, bodies, attachments)
+            
+    # Multi-Part Message (e.g., multipart/alternative, multipart/mixed)
+    parse_parts(payload.get('parts', {}), bodies, attachments)
+            
     return (bodies, attachments)
 
 
@@ -116,7 +110,7 @@ def parse(gmailService, rawMessages, ignoreIdList):
         payload = realMessage.get('payload', {})  
         headers = payload.get('headers', [])
 
-        (bodies, attachments) = get_message_body(payload) # Plaintext repn of body
+        (bodies, attachments) = getBodiesAttachments(payload) # Plaintext repn of body
         
         # headers is a list of dictionaries {'name: ..., 'value': ...}
         # To get the subject, for example, find the first dictionary {'name: 'Subject', 'value': ...}
