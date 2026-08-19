@@ -47,47 +47,52 @@ def get_message_body(payload):
     Extracts text/plain or text/html body from a full Gmail API message object.
     Returns a dict: {'plain': str, 'html': str}
     """
-    
-    bodies = {'plain': '', 'html': ''}
 
-    def parse_parts(parts):
+
+    def parsePartOrPayload(x):
         
-        for part in parts:
-            mime_type = part.get('mimeType')
-            body_data = part.get('body', {}).get('data')
-
-            if body_data:
+        body_data = x.get('body', {}).get('data')
+        if body_data:
+            if x.get('mimeType', 'text/plain') == 'text/plain':
                 # Gmail API uses URL-safe base64 encoding (- and _ instead of + and /)
                 decoded_bytes = base64.urlsafe_b64decode(body_data)
-                decoded_text = decoded_bytes.decode('utf-8', errors='ignore')
+                return decoded_bytes.decode('utf-8', errors='ignore')
 
-                if mime_type == 'text/plain' and not bodies['plain']:
-                    bodies['plain'] = decoded_text
-                elif mime_type == 'text/html' and not bodies['html']:
-                    bodies['html'] = decoded_text
+        return None
+    
+    # If any part contains plain text return that,
+    # otherwise return None
+    def parse_parts(parts):
+
+            
+        # parts is a list.
+        # If any part in the list contains a body records the plain text portion
+        # If a part has a list of parts itself, recurse
+        for part in parts:
+            result = parsePartOrPayload(part)
+            if result: return result
+            
+            """
+            # attachment
+            if part.get('filename') and part.get('body', {}).get('attachmentId'):
+                filename = part['filename']
+                print("attached", filename)
+            """
 
             # Recursively handle nested multi-part structures
             if 'parts' in part:
-                parse_parts(part['parts'])
-
+                result = parse_parts(part['parts'])
+                if result: return result
     # 1. Simple Single-Part Message
     
     if 'data' in payload.get('body', {}):
-        body_data = payload['body']['data']
-        decoded_bytes = base64.urlsafe_b64decode(body_data)
-        decoded_text = decoded_bytes.decode('utf-8', errors='ignore')
-        
-        mime_type = payload.get('mimeType', 'text/plain')
-        if mime_type == 'text/html':
-            bodies['html'] = decoded_text
-        else:
-            bodies['plain'] = decoded_text
+        return parsePartOrPayload(payload)
 
     # 2. Multi-Part Message (e.g., multipart/alternative, multipart/mixed)
     elif 'parts' in payload:
-        parse_parts(payload['parts'])
+        return parse_parts(payload['parts'])
 
-    return bodies
+    return None
 
 
 def parse(gmailService, rawMessages, ignoreIdList):
@@ -104,7 +109,7 @@ def parse(gmailService, rawMessages, ignoreIdList):
         payload = realMessage.get('payload', {})  
         headers = payload.get('headers', [])
 
-        body = get_message_body(payload)['plain'] # Plaintext repn of body
+        body = get_message_body(payload) # Plaintext repn of body
         
         # headers is a list of dictionaries {'name: ..., 'value': ...}
         # To get the subject, for example, find the first dictionary {'name: 'Subject', 'value': ...}
