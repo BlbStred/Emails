@@ -6,14 +6,14 @@ import re
 import base64
 
 class ParsedMessage:
-    def __init__(self, id, sender, subject, date, category, body, attachment):
-        self.id         = str(id)
-        self.sender     = str(sender)
-        self.subject    = str(subject)
-        self.date       = str(date)
-        self.category   = str(category)
-        self.body       = str(body)
-        self.attachment = str(attachment)                                
+    def __init__(self, id, sender, subject, date, category, bodies, attachments):
+        self.id          = str(id)
+        self.sender      = str(sender)
+        self.subject     = str(subject)
+        self.date        = str(date)
+        self.category    = str(category)
+        self.bodies      = bodies
+        self.attachments = attachments                            
 
     def __str__(self):
         result  =                self.id
@@ -21,8 +21,13 @@ class ParsedMessage:
         result += "\nsubject:    " + self.subject
         result += "\ndate:       " + self.date
         result += "\nin:         " + self.category
-        result += "\nbody:       " + self.body
-        result += "\nattachment: " + self.attachment
+
+        for b in self.bodies:
+            result += "\nbody:       " + b
+
+        for a in self.attachments:
+            result += "\nattachment: " + a
+            
         return result
 
     
@@ -44,7 +49,7 @@ def get_message_category(message_obj: dict) -> str:
     return "Personal"
 
 
-def parsePartOrPayload(x, data_attachment):
+def parsePartOrPayload(x, bodies, attachments):
     body = x.get('body')
     if body:
 
@@ -53,28 +58,28 @@ def parsePartOrPayload(x, data_attachment):
             if x.get('mimeType', 'text/plain') == 'text/plain':
                 # Gmail API uses URL-safe base64 encoding (- and _ instead of + and /)
                 decoded_bytes = base64.urlsafe_b64decode(body_data)
-                data_attachment['data'] = decoded_bytes.decode('utf-8', errors='ignore')
+                bodies.append(decoded_bytes.decode('utf-8', errors='ignore'))
 
         if body.get('attachmentId'):
             attachedFile = x.get('filename')
             if attachedFile:
-                data_attachment['attachment'] = attachedFile
+                attachments.append(attachedFile)
         
    
     
     
 # If any part contains plain text return that,
 # otherwise return None
-def parse_parts(parts, data_attachment):
+def parse_parts(parts, bodies, attachments):
     # parts is a list.
     # If any part in the list contains a body records the plain text portion
     # If a part has a list of parts itself, recurse
     for part in parts:
-        parsePartOrPayload(part, data_attachment)
+        parsePartOrPayload(part, bodies, attachments)
         
         # Recursively handle nested multi-part structures
         if 'parts' in part:
-            parse_parts(part['parts'], data_attachment)
+            parse_parts(part['parts'], bodies, attachments)
             
 
                 
@@ -83,17 +88,18 @@ def get_message_body(payload):
     Extracts text/plain or text/html body from a full Gmail API message object.
     Returns a dict: {'plain': str, 'html': str}
     """
-    data_attachment = {}
+    bodies      = []
+    attachments = []
     # 1. Simple Single-Part Message
     
     if 'data' in payload.get('body', {}):
-        parsePartOrPayload(payload, data_attachment)
+        parsePartOrPayload(payload, bodies, attachments)
 
     # 2. Multi-Part Message (e.g., multipart/alternative, multipart/mixed)
     if 'parts' in payload:
-        parse_parts(payload['parts'], data_attachment)
+        parse_parts(payload['parts'], bodies, attachments)
 
-    return data_attachment
+    return (bodies, attachments)
 
 
 def parse(gmailService, rawMessages, ignoreIdList):
@@ -110,7 +116,7 @@ def parse(gmailService, rawMessages, ignoreIdList):
         payload = realMessage.get('payload', {})  
         headers = payload.get('headers', [])
 
-        data_attachment = get_message_body(payload) # Plaintext repn of body
+        (bodies, attachments) = get_message_body(payload) # Plaintext repn of body
         
         # headers is a list of dictionaries {'name: ..., 'value': ...}
         # To get the subject, for example, find the first dictionary {'name: 'Subject', 'value': ...}
@@ -121,7 +127,7 @@ def parse(gmailService, rawMessages, ignoreIdList):
 
         parsedMessages.append(ParsedMessage(msgId, sender, subject, date,
                                             get_message_category(realMessage),
-                                            data_attachment.get('data'),
-                                            data_attachment.get('attachment')))                                      
+                                            bodies, attachments))
+                                            
 
     return parsedMessages
