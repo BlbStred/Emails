@@ -162,10 +162,10 @@ class EmailId:
                     self.prevId = file.readline().split()[0]
             except:
                 self.prevId     = ""        
-
+            """
             with open(self.fileName, "w") as file:
                 file.write(emailId + " is the most recent email id already processed")
-            
+            """
         return emailId == self.prevId
 
         
@@ -182,7 +182,8 @@ aiService  = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 # Return YES, NO, UNSURE depending on AI's classification of the given topic
 # topic is typically the subject of an email
 def relevance(topic):
-    
+    print("topic:", topic)
+    return  'UNSURE'
     try:
         # The Request
         response = aiService.chat.completions.create(
@@ -348,6 +349,10 @@ def apartments():
 
 # Format the summary email and send it to myself
 def sendEmail(subject, body):
+    print()
+    print("Subject:", subject)
+    print("Body:", body)
+    return
 
     # Setup the summary email
     msg = MIMEMultipart("alternative")
