@@ -59,9 +59,8 @@ gmailService = GmailService.GmailService()
 def getEmailList(category, ignoreIdList):
     
     # List messages (Gmail returns these in reverse chronological order by default)
-    messages = gmailService.rawMessages(f"category:{category} label:inbox")
+    messages = gmailService.rawMessages(f"category:{category} label:inbox before:2026/08/20")
     
-
     emailList = []          # the list to return
     for msg in messages:
         # Check whether precessed previously

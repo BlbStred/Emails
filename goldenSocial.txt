@@ -1,4 +1,3 @@
-topic: Save $5 with package pickup
 topic: FOR YOUR EYES ONLY: Lanterns
 topic: Affordable Luxury Bedding Just For You
 topic: Score new finds and pay over time. $0 down. Zero late fees.
@@ -18,7 +17,6 @@ topic: Important Security Update Regarding Your Quest Data
 topic: You’ve got deals
 topic: FOR YOUR EYES ONLY: Lanterns
 topic: ?? TripTuesday is almost here! $99 roundtrip flights
-topic: You have 1 new message
 topic: ? Leo Tung commented: "High from L.A."
 topic: ? Carole Hsin Yi Chen added a new photo
 topic: ? Stephen A. Edwards commented: "Totally unexpected!"
@@ -54,12 +52,9 @@ Body:
         <html>
           <body>
             Received 0 relevant, 0 irrelevant social emails,
-            and unsure about 50.
+            and unsure about 48.
             
-            <p>UNSURE ABOUT:<br><a href=https://mail.google.com/mail/u/0/#inbox/1a01c83e56808267 target="_blank" rel="noopener noreferrer">
-                1a01c83e56808267 promotions&nbsp;from&nbsp;"Amazon.com" <store-news@amazon.com>&nbsp;Thu, 20 Aug 2026 00:13:20 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save $5 with package pickup
-                </a><br>
-        <a href=https://mail.google.com/mail/u/0/#inbox/1a01c125de0e31ab target="_blank" rel="noopener noreferrer">
+            <p>UNSURE ABOUT:<br><a href=https://mail.google.com/mail/u/0/#inbox/1a01c125de0e31ab target="_blank" rel="noopener noreferrer">
                 1a01c125de0e31ab promotions&nbsp;from&nbsp;HBO Max <HBOMax@mail.hbomax.com>&nbsp;Wed, 19 Aug 2026 22:09:19 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FOR YOUR EYES ONLY: Lanterns
                 </a><br>
         <a href=https://mail.google.com/mail/u/0/#inbox/1a01c0c45c956495 target="_blank" rel="noopener noreferrer">
@@ -115,9 +110,6 @@ Body:
                 </a><br>
         <a href=https://mail.google.com/mail/u/0/#inbox/1a00d39bf1c9f180 target="_blank" rel="noopener noreferrer">
                 1a00d39bf1c9f180 promotions&nbsp;from&nbsp;"Trip.com" <Trip.com@newsletter.trip.com>&nbsp;Mon, 17 Aug 2026 00:58:03 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?? TripTuesday is almost here! $99 roundtrip flights
-                </a><br>
-        <a href=https://mail.google.com/mail/u/0/#inbox/1a01c820b710cbd9 target="_blank" rel="noopener noreferrer">
-                1a01c820b710cbd9 social&nbsp;from&nbsp;LinkedIn <notifications-noreply@linkedin.com>&nbsp;Thu, 20 Aug 2026 00:11:19 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You have 1 new message
                 </a><br>
         <a href=https://mail.google.com/mail/u/0/#inbox/1a01c56aec96a087 target="_blank" rel="noopener noreferrer">
                 1a01c56aec96a087 social&nbsp;from&nbsp;Leo on Facebook <close_friend_updates@facebookmail.com>&nbsp;Wed, 19 Aug 2026 16:23:53 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;? Leo Tung commented: "High from L.A."
