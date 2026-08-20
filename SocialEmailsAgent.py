@@ -26,12 +26,20 @@ from dotenv import load_dotenv # run 'pip install python-dotenv'
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from pathlib import Path
 
+commonDir = "C:\\Users\\Dan\\Documents\\Computing\\common"
+if commonDir not in sys.path:
+    sys.path.insert(0, str(Path(commonDir).resolve()))
+
+import my
+   
+my.init()
+
+    
 # Load environment variables from .env
 load_dotenv()
 
-# Reconfigure stdout to handle errors gracefully
-sys.stdout.reconfigure(errors='replace')
 
 
 
