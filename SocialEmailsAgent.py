@@ -55,7 +55,7 @@ gmailService = GmailService.GmailService()
 
 
 
-
+@my.timeit
 def getEmailList(category, ignoreIdList):
     
     # List messages (Gmail returns these in reverse chronological order by default)
@@ -91,6 +91,7 @@ def getEmailList(category, ignoreIdList):
 
 
 
+@my.timeit
 def getEmailIdList(category):
     
     # List messages (Gmail returns these in reverse chronological order by default)
@@ -139,6 +140,7 @@ class EmailId:
     # Save the previous one from fileName in self.prevId
     # Store that new given emailId in the file
 
+    
     def processed(self, emailId):
         if self.prevId == None:
             # first time processed() called, whuch is the most recent id
@@ -366,10 +368,9 @@ def sendEmail(subject, body):
         server.quit()
 
 
-
-
-if __name__ == '__main__':
-
+@my.timeit
+def mymain():
+    global idService
     idService  = {"promotions" : EmailId("promotions"),  # To check if email id previously processed
                   "social"     : EmailId("social"),
                   "updates"    : EmailId("updates")}
@@ -388,3 +389,8 @@ if __name__ == '__main__':
     sendEmail("Windward passage apartments",
               apartments())
     """
+
+
+if __name__ == '__main__':
+    
+    mymain()

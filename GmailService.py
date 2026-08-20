@@ -18,15 +18,14 @@
 # 2. regenerate MY_GMAIL_APP_PASSWORD in .env
 # 2.1 go to myaccount.google.com/apppasswords
 
-"""
-Possible categories
-CATEGORY_PERSONAL (maps to Primary)
-CATEGORY_PROMOTIONS
-CATEGORY_SOCIAL
-CATEGORY_UPDATES
-CATEGORY_FORUMS
-"""
+import sys
+from pathlib import Path
 
+commonDir = "C:\\Users\\Dan\\Documents\\Computing\\common"
+if commonDir not in sys.path:
+    sys.path.insert(0, str(Path(commonDir).resolve()))
+
+import my
 
 import os
 from google.oauth2.credentials import Credentials
@@ -116,7 +115,7 @@ class GmailService:
     # in:inbox instead of label:inbox, is:unread instead of label:unread
     # One must write category:personal instead of label:category_personal
     
-
+    @my.timeit
     def rawMessages(self, query):
                 
         messages = []   # collects all the pages, which google provides page by page
