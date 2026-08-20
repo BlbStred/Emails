@@ -33,6 +33,7 @@ if commonDir not in sys.path:
     sys.path.insert(0, str(Path(commonDir).resolve()))
 
 import my
+import GmailService
    
 my.init()
 
@@ -48,27 +49,8 @@ load_dotenv()
 #######################################
         
 
-def get_gmail_service():
-    
-    # If modifying these scopes, delete the file token.json.
-    SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
 
-    creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-    return build('gmail', 'v1', credentials=creds)
-
-
-
-gmailService = get_gmail_service() # To access gmail
+gmailService = GmailService.GmailService()
 
 
 
@@ -77,9 +59,8 @@ gmailService = get_gmail_service() # To access gmail
 def getEmailList(category, ignoreIdList):
     
     # List messages (Gmail returns these in reverse chronological order by default)
-    results = gmailService.users().messages().list(userId='me',
-                                                   q=f"category:{category} label:inbox").execute()
-    messages = results.get('messages', [])
+    messages = gmailService.rawMessages(f"category:{category} label:inbox")
+    
 
     emailList = []          # the list to return
     for msg in messages:
@@ -92,7 +73,7 @@ def getEmailList(category, ignoreIdList):
         if idService[category].processed(msgId): break          # reached as far as last time
                 
         # msg provides id only, fetch full message details
-        message = gmailService.users().messages().get(userId='me', id=msgId).execute()
+        message = gmailService.messagesObject().get(userId='me', id=msgId).execute()
         
         # Extract headers 
         payload = message.get('payload', {})
@@ -114,9 +95,7 @@ def getEmailList(category, ignoreIdList):
 def getEmailIdList(category):
     
     # List messages (Gmail returns these in reverse chronological order by default)
-    results = gmailService.users().messages().list(userId='me',
-                                                   q=f"category:{category} label:inbox").execute()
-    messages = results.get('messages', [])
+    messages = gmailService.rawMessages(f"category:{category} label:inbox")
 
     emailList = []          # the list to return
     for msg in messages:
