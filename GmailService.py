@@ -70,14 +70,31 @@ class GmailService:
         return self.serv.users().messages()
 
     
+    # Returns a list of all raw messages matching the query.
+    # The query is a string of entries saparated by blanks, of the form key:value
+    # Keys are
+    # from:
+    # to:
+    # subject:
+    # cc:
+    # bcc:    
+    # category:   primary, promotions, social, updates, forums
+    # label:      e.g. Receipts, Tax
+    # in:         inbox, sent, draft, trash, spam, anywhere
+    # is:         read, unread, starred, important, muted
+    # after:      e.g., after:2026/12/24
+    # before:     e.g., after:2026/12/24
+    # newer_than: e.g., newer_than:7d   (7 days)
+    # older_than: e.g., older_than:2m   (2 months)
+    # has:attachment
+    # filename:   e.g., filename:pdf OR filename:xyz.doc
+    # size:       e.g., size:1000  (message, incl. attachments, at least 1000 bytes)
+    # larger:     e.g., larger:1k  (message, incl. attachments, at least 1000 bytes)
+    # smaller:    e.g., smaller:5m (message, incl. attachments, at at most 5MB)
 
-    def rawMessages(self, category, label):
-        
-        query = ""
-        if category != "": query += f"category:{category} "
-        if label    != "": query += f"label:{label} "
-        
-        messages = []   # accumulates all the pages, which google provides page by page
+    def rawMessages(self, query):
+                
+        messages = []   # collects all the pages, which google provides page by page
 
         # The function list(..., pageToken=pageToken) below takes a pageToken as argument.
         # It provides the next page of emails to list.
