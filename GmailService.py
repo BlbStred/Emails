@@ -91,6 +91,31 @@ class GmailService:
     # size:       e.g., size:1000  (message, incl. attachments, at least 1000 bytes)
     # larger:     e.g., larger:1k  (message, incl. attachments, at least 1000 bytes)
     # smaller:    e.g., smaller:5m (message, incl. attachments, at at most 5MB)
+    
+    # Note on labels:
+    # Gmail assigns to every message at least one system label
+    # INBOX
+    # SENT
+    # DRAFT
+    # SPAM
+    # TRASH
+    # UNREAD
+    # STARRED
+    # IMPORTANT
+    # SNOOZE
+    # CHAT
+    # CATEGORY_PERSONAL
+    # CATEGORY_UPDATES
+    # CATEGORY_PROMOTIONS
+    # CATEGORY_SOCIAL
+    # CATEGORY_FORUMS
+    # MUTED
+    # SCHEDULED
+    # In addition, a user can assign more user labels, e.g., tax
+    # For readability, one can write
+    # in:inbox instead of label:inbox, is:unread instead of label:unread
+    # One must write category:personal instead of label:category_personal
+    
 
     def rawMessages(self, query):
                 
