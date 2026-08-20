@@ -83,7 +83,7 @@ class GmailService:
     # in:         inbox, sent, draft, trash, spam, anywhere
     # is:         read, unread, starred, important, muted
     # after:      e.g., after:2026/12/24
-    # before:     e.g., after:2026/12/24
+    # before:     e.g., before:2026/12/24
     # newer_than: e.g., newer_than:7d   (7 days)
     # older_than: e.g., older_than:2m   (2 months)
     # has:attachment
