@@ -97,7 +97,8 @@ def getBodiesAttachments(payload):
     return (bodies, attachments)
 
 
-def parse(gmailService, rawMessages, ignoreIdList):
+def parse(gmailService, rawMessages,
+          wanted):  # for a msgId returns 'yes', 'no', or 'quit'
         
     parsedMessages = []          # the list to return
     for rawMessage in rawMessages:
@@ -105,6 +106,11 @@ def parse(gmailService, rawMessages, ignoreIdList):
         # realMessage can be obtained from those
         
         msgId = rawMessage['id']
+        match wanted(msgId):
+            case 'yes':  pass
+            case 'no':   continue
+            case 'quit': break
+            
         realMessage = gmailService.messagesObject().get(userId='me', id=msgId).execute()
         
         # Extract headers 

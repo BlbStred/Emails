@@ -16,9 +16,10 @@ if __name__ == '__main__':
     
     gmailService = GmailService.GmailService()
     
-    ignore = []
+    wanted = lambda x: 'yes'   # all raw messages are wanted
     emails =  ParsedMessage.parse(gmailService,
-                                  gmailService.rawMessages("label:yihsin"), ignore)
+                                  gmailService.rawMessages("label:yihsin"),
+                                  wanted)
        
     for e in emails:
         if "Watch" not in e.subject:
