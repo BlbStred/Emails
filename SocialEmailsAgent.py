@@ -34,6 +34,7 @@ if commonDir not in sys.path:
 
 import my
 import GmailService
+import ParsedMessage
    
 my.init()
 
@@ -52,42 +53,28 @@ load_dotenv()
 
 gmailService = GmailService.GmailService()
 
+# Filter of message ids
+class Wanted:
+    def __init__(self, ignoreIdList, idService):
+        self.ignoreIdList = ignoreIdList
+        self.idService    = idService
 
-
+    def wanted(self, msgId):
+        if msgId in self.ignoreIdList:      return 'no'   # ignore this message only
+        if self.idService.processed(msgId): return 'quit' # ignore this and subsequent messages
+        return 'yes'                                      # process this message
+        
 
 @my.timeit
 def getEmailList(category, ignoreIdList):
-    
     # List messages (Gmail returns these in reverse chronological order by default)
+    # I rely on that in that if any message seen previously, then all messages below also
     messages = gmailService.rawMessages(f"category:{category} label:inbox before:2026/08/20")
-    
-    emailList = []          # the list to return
-    for msg in messages:
-        # Check whether precessed previously
-        msgId = msg['id']
-
-        if msgId in ignoreIdList:
-            continue
-
-        if idService[category].processed(msgId): break          # reached as far as last time
-                
-        # msg provides id only, fetch full message details
-        message = gmailService.messagesObject().get(userId='me', id=msgId).execute()
         
-        # Extract headers 
-        payload = message.get('payload', {})
-        headers = payload.get('headers', [])
-        
-        # headers is a list of dictionaries {'name: ..., 'value': ...}
-        # To get the subject, for example, find the first dictionary {'name: 'Subject', 'value': ...}
-        subject = next((h['value'] for h in headers if h['name'] == 'Subject'), 'No Subject')
-        sender  = next((h['value'] for h in headers if h['name'] == 'From'),    'Unknown Sender')
-        date    = next((h['value'] for h in headers if h['name'] == 'Date'),    'Unknown Date')
-        date    = re.split(r'[+-]', date)[0]     # Get rid of the universal time at the end
+    return ParsedMessage.parse(gmailService,
+                               messages,
+                               Wanted(ignoreIdList, idService[category]).wanted)
 
-        emailList.append(EmailMessage(msgId, sender, subject, date, category))
-
-    return emailList
 
 
 
