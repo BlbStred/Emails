@@ -1,28 +1,9 @@
-# When gmail autorization expires:
-#
-# 1 regenerate token.json
-# 1.1 delete token.json
-# 1.2 python SocialEmailsAgent.py
-# 1.3 Google will open a warning window
-# 1.4 Do not go to safety -- click on "advanced"
-# 1.5 Do what they label as unsafe
-#
-# 2. regenerate MY_GMAIL_APP_PASSWORD in .env
-# 2.1 go to myaccount.google.com/apppasswords
-
-
-
+# Uses OpenAI to see which recent emails classified as
+# promotion, social, or updates
+# are actually relevant
 
 import os
-import re
-import os.path
 import sys
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from openai import OpenAI
-from dotenv import load_dotenv # run 'pip install python-dotenv'
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -36,57 +17,16 @@ import my
 import GmailService
 import AIservice
 import ParsedMessage
-   
+
+# Settings common to all my programs
 my.init()
 
-    
-# Load environment variables from .env
-load_dotenv()
-
-
-
 
 #######################################
-# GMAIL SERVICES
-#######################################
-        
-
-
-gmailService = GmailService.GmailService()
-
-# Filter of message ids
-class Wanted:
-    def __init__(self, idService):
-        self.idService = idService
-
-    def wanted(self, msgId):
-        if self.idService.processed(msgId): return 'quit' # ignore this and subsequent messages
-        return 'yes'                                      # process this message
-        
-
-@my.timeit
-def getEmailList(category, idService):
-    # List messages (Gmail returns these in reverse chronological order by default)
-    # I rely on that in that if any message seen previously, then all messages below also
-    # Collect messages in the wanted category, but still in inbox --
-    # nobody looked at it and moved it to a user label
-    messages = gmailService.rawMessages(f"category:{category} -category:primary label:inbox before:2026/08/20")
-        
-    return ParsedMessage.parse(gmailService,
-                               messages,
-                               Wanted(idService).wanted)
-
-
-
-
-
-#######################################
-# MY SERVICES
+# IDSERVICE: Detection of previously processed messages
 #######################################
 
-
-
-
+# This class remembers in a file which messages were processed previously
 class EmailId:
 
     def __init__(self, category):
@@ -113,7 +53,56 @@ class EmailId:
             """
         return emailId == self.prevId
 
+# Create the services for each category of interest,
+# and save them in a dictionary
+
+idService = {'promotions': EmailId('promotions'),   
+             'social'    : EmailId('social'),
+             'updates'   : EmailId('updates')}               
+
+
+
+
+#######################################
+# GMAIL message extraction
+#######################################
         
+gmailService = GmailService.GmailService()
+
+# getEmailList() returns a list of messages of interest.
+# It uses gmail query filter to decide which messages are of interest
+# In addition, this is my specific filter of message ids.
+
+class Wanted:
+    # idService allows us to check whether an email id has been processed in previous days
+    def __init__(self, idService):
+        self.idService = idService
+
+    # This is the actual filter -- it detects previously processed messages
+    def wanted(self, msgId):
+        if self.idService.processed(msgId): return 'quit' # ignore this and subsequent messages
+        return 'yes'                                      # do process this message
+        
+
+@my.timeit
+def getEmailList(category):
+    # List messages (Gmail returns these in reverse chronological order by default)
+    # I rely on it in that if any message is seen previously, then all messages below also.
+    # Collect messages satisfying:
+    # - in the wanted category, e.g., Updates
+    # - not also primary,
+    # - still in inbox, as opposed to already moved to a user label
+    
+    messages = gmailService.rawMessages(f"category:{category} -category:primary label:inbox before:2026/08/20")
+
+    # return the rawMessages after parsed into my data structure.
+    # But filter out those messages not wanted by EmailId(category), i.e.,
+    # messages processed in earlier days
+    return ParsedMessage.parse(gmailService,
+                               messages,
+                               Wanted(idService[category]).wanted)
+
+
 
 
 
@@ -214,9 +203,9 @@ def sendEmail(subject, body):
 @my.timeit
 def mymain():
     
-    emails =  (getEmailList('promotions', EmailId("promotions")) +
-               getEmailList('social',     EmailId("social"))     +
-               getEmailList('updates',    EmailId("updates")))
+    emails =  (getEmailList('promotions') +
+               getEmailList('social')     +
+               getEmailList('updates'))
     
     sendEmail("Social emails",
               socialEmails(emails, aiService.relevance))
