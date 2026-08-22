@@ -6,7 +6,7 @@
 
 # Email specific
 *.json
-con.txt
+con*.txt
 
 
 
