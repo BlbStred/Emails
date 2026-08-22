@@ -269,11 +269,6 @@ def mymain():
               socialEmails(emails, relevance))
     
 
-    # Disabled because OpenAI will consult the web
-    """
-    sendEmail("Windward passage apartments",
-              apartments())
-    """
 
 
 if __name__ == '__main__':
