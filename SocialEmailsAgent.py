@@ -64,7 +64,7 @@ class Wanted:
         
 
 @my.timeit
-def getEmailList(category):
+def getEmailList(category, idService):
     # List messages (Gmail returns these in reverse chronological order by default)
     # I rely on that in that if any message seen previously, then all messages below also
     # Collect messages in the wanted category, but still in inbox --
@@ -73,7 +73,7 @@ def getEmailList(category):
         
     return ParsedMessage.parse(gmailService,
                                messages,
-                               Wanted(idService[category]).wanted)
+                               Wanted(idService).wanted)
 
 
 
@@ -260,14 +260,10 @@ def sendEmail(subject, body):
 
 @my.timeit
 def mymain():
-    global idService
-    idService  = {"promotions" : EmailId("promotions"),  # To check if email id previously processed
-                  "social"     : EmailId("social"),
-                  "updates"    : EmailId("updates")}
     
-    emails =  (getEmailList('promotions') +
-               getEmailList('social') +
-               getEmailList('updates'))
+    emails =  (getEmailList('promotions', EmailId("promotions")) +
+               getEmailList('social',     EmailId("social"))     +
+               getEmailList('updates',    EmailId("updates")))
     
     sendEmail("Social emails",
               socialEmails(emails, relevance))
