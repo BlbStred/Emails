@@ -55,25 +55,25 @@ gmailService = GmailService.GmailService()
 
 # Filter of message ids
 class Wanted:
-    def __init__(self, ignoreIdList, idService):
-        self.ignoreIdList = ignoreIdList
-        self.idService    = idService
+    def __init__(self, idService):
+        self.idService = idService
 
     def wanted(self, msgId):
-        if msgId in self.ignoreIdList:      return 'no'   # ignore this message only
         if self.idService.processed(msgId): return 'quit' # ignore this and subsequent messages
         return 'yes'                                      # process this message
         
 
 @my.timeit
-def getEmailList(category, ignoreIdList):
+def getEmailList(category):
     # List messages (Gmail returns these in reverse chronological order by default)
     # I rely on that in that if any message seen previously, then all messages below also
-    messages = gmailService.rawMessages(f"category:{category} label:inbox before:2026/08/20")
+    # Collect messages in the wanted category, but still in inbox --
+    # nobody looked at it and moved it to a user label
+    messages = gmailService.rawMessages(f"category:{category} -category:primary label:inbox before:2026/08/20")
         
     return ParsedMessage.parse(gmailService,
                                messages,
-                               Wanted(ignoreIdList, idService[category]).wanted)
+                               Wanted(idService[category]).wanted)
 
 
 
@@ -362,10 +362,9 @@ def mymain():
                   "social"     : EmailId("social"),
                   "updates"    : EmailId("updates")}
     
-    ignore = getEmailIdList('primary')
-    emails =  (getEmailList('promotions', ignore) +
-               getEmailList('social',     ignore) +
-               getEmailList('updates',    ignore))
+    emails =  (getEmailList('promotions') +
+               getEmailList('social') +
+               getEmailList('updates'))
     
     sendEmail("Social emails",
               socialEmails(emails, relevance))
