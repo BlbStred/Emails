@@ -6,12 +6,13 @@ import re
 import base64
 
 class ParsedMessage:
-    def __init__(self, id, sender, subject, date, category, bodies, attachments):
+    def __init__(self, id, sender, subject, date, category, labels, bodies, attachments):
         self.id          = str(id)
         self.sender      = str(sender)
         self.subject     = str(subject)
         self.date        = str(date)
         self.category    = str(category)
+        self.labels      = labels
         self.bodies      = bodies         # list of plain text
         self.attachments = attachments    # list of file names attached
 
@@ -21,6 +22,9 @@ class ParsedMessage:
         result += "\nsubject:    " + self.subject
         result += "\ndate:       " + self.date
         result += "\nin:         " + self.category
+
+        for l in self.labels:
+            result += "\nlabel:      " + l
 
         for b in self.bodies:
             result += "\nbody:       " + b
@@ -126,8 +130,16 @@ def parse(gmailService, rawMessages,
         date    = next((h['value'] for h in headers if h['name'] == 'Date'),    'Unknown Date')
         date    = re.split(r'[+-]', date)[0]     # Get rid of the universal time at the end
 
+        # Extract labels
+        labels = []
+        labelIds = realMessage.get("labelIds", [])
+        for label in labelIds:
+            labelInfo = gmailService.labelsObject().get(userId='me', id=label).execute()
+            labels.append(labelInfo['name'])
+                    
         parsedMessages.append(ParsedMessage(msgId, sender, subject, date,
                                             getCategory(realMessage),
+                                            labels,
                                             bodies, attachments))
                                             
 

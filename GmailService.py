@@ -69,6 +69,10 @@ class GmailService:
         return self.serv.users().messages()
 
     
+    def labelsObject(self):
+        return self.serv.users().labels()
+
+    
     # Returns a list of all raw messages matching the query.
     # The query is a string of entries saparated by blanks, of the form key:value
     # Keys are

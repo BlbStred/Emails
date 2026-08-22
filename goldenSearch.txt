@@ -4,6 +4,9 @@ from:       Gundry MD <newsletter@gundrymd.com>
 subject:    Can I text you, YIHSIN?
 date:       Fri, 07 Aug 2026 05:21:05 
 in:         Updates
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_UPDATES
 body:       https://www2.gundrymd.com/cid/701Vo00000ElmHKIAZ
 
 =C2=A0
@@ -75,6 +78,9 @@ from:       Cafe Kopi <messenger@messaging.squareup.com>
 subject:    Receipt from Cafe Kopi #xmzm
 date:       Thu, 16 Jul 2026 22:02:38 
 in:         Updates
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_UPDATES
 body:       Reply to this email to leave feedback for Cafe Kopi
 You paid $22.62 with your Visa ending in 5853 to Cafe Kopi on Jul 16 2026 at 12:01 PM.
 
@@ -92,6 +98,9 @@ from:       LinkedIn <updates-noreply@linkedin.com>
 subject:    David Z. Pan reacted to this post: We're pleased to share that…
 date:       Tue, 17 Feb 2026 01:59:00 
 in:         Updates
+label:      YiHsin
+label:      UNREAD
+label:      CATEGORY_UPDATES
 body:       David Z. Pan reacted to this
         
 
@@ -178,6 +187,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    
 date:       Mon, 16 Feb 2026 11:14:17 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       
 
 attachment: 20250630_112103.jpg
@@ -189,6 +201,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    
 date:       Sun, 4 Jan 2026 08:19:58 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       
 
 attachment: mmexport1767550741006.jpg
@@ -198,6 +213,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    
 date:       Fri, 2 Jan 2026 14:43:19 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       
 
 attachment: Screenshot_20260102-144144_Messages.jpg
@@ -207,6 +225,10 @@ from:       chenyihsin0 <chenyihsin0@gmail.com>
 subject:    Richard Wolff & Michael Hudson: Trump's "The Big,  Beautiful And The Ugly"
 date:       Thu, 03 Jul 2025 07:17:52 
 in:         Personal
+label:      YiHsin
+label:      UNREAD
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       https://youtube.com/live/-5vl79OTfzY?si=v1Sr_AsB--KKcvb3Sent from my Galaxy
 
  19709a82020dc02a
@@ -214,6 +236,10 @@ from:       chenyihsin0 <chenyihsin0@gmail.com>
 subject:    No Subject
 date:       Sun, 25 May 2025 12:54:59 
 in:         Personal
+label:      YiHsin
+label:      UNREAD
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       https://brightnestlife.com/se/ts1/yt/l1/?utm_campaign=DIGI02H_SIGHT_TS01_05&sub2=&sub3=&sub4=188451978468&sub5=753941328663&sub6=22594898083&sub7=m&sub8=&sub9=&sub10=&utm_source=Google&wbraid=&gbraid=&utm_content=2021704TS01TSYT&sub15=&ref_id=Cj0KCQjw_8rBBhCFARIsAJrc9yCJ8kRtMFM4-FeGslI8nj1w-9tzs2fjKnsm1eGdDBt7ZhSzwQOjVZgaAlnoEALw_wcB&utm_medium=cpc&cmpid=682c0c929c1661a1634d5b6c&gad_source=2&gclid=Cj0KCQjw_8rBBhCFARIsAJrc9yCJ8kRtMFM4-FeGslI8nj1w-9tzs2fjKnsm1eGdDBt7ZhSzwQOjVZgaAlnoEALw_wcBSent from my Galaxy
 
  196a6f7bf5655f09
@@ -221,6 +247,8 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    
 date:       Tue, 6 May 2025 08:59:23 
 in:         Personal
+label:      YiHsin
+label:      CATEGORY_PERSONAL
 body:       https://usagardencenter.com/products/the-sacred-bonsai-lotus-blossom-flowers-seeds?gad_source=2&gclid=Cj0KCQjw5ubABhDIARIsAHMighavS0vhZobMkyzl7TNXcde28IQxSy0Q1xlK7FUtBLwFWTt2owEKopUaAg1XEALw_wcB
 
 
@@ -229,6 +257,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    
 date:       Fri, 2 May 2025 08:54:35 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       https://comfortkneepads.com/articles/k-sleeve-an19/?utm_source=google&utm_medium=Youtube&utm_campaign=22341542397&adgroupid=178103952922&utm_content=739553325596&utm_term=%7Bcreative_name%7D&gad_source=2&gclid=Cj0KCQjw2tHABhCiARIsANZzDWo6e1l-9hvnkGPv1FT7NV87q4L088MNAhaklh1bkCKVUAH36is0ri0aAny8EALw_wcB&utm_auid=d4e7b020-2786-11f0-9250-bb766523860e
 
 
@@ -237,6 +268,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    
 date:       Sat, 18 Jan 2025 10:14:35 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       https://youtu.be/SB9SDt3EVFA
 
 
@@ -245,6 +279,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    Join me on LINE!
 date:       Fri, 27 Dec 2024 19:48:06 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       Chen Yihsin is inviting you to join LINE, the all-in-one communication app!
 
 Enjoy free voice and video calls, group chats, stickers, games, and more
@@ -264,6 +301,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    
 date:       Thu, 26 Dec 2024 17:23:25 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       
 
 attachment: ????.PDF
@@ -273,6 +313,9 @@ from:       chenyihsin0 <chenyihsin0@gmail.com>
 subject:    No Subject
 date:       Mon, 23 Dec 2024 18:28:40 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       Sent from my Galaxy
 attachment: 20240516_060557.jpg
 
@@ -281,6 +324,9 @@ from:       Y Brand <chenyihsin0@gmail.com>
 subject:    Wwill this affect our account? atch "Fidelity: The Consumer is in TROUBLE as 401K Hardship Withdrawals JUMP 300% (Recession Indicator)" on YouTube
 date:       Wed, 22 Nov 2023 14:23:34 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       https://youtu.be/n1sUH5HW1OA?si=1QLu5wyiUn3a4dGb
 
 
@@ -289,6 +335,9 @@ from:       chenyihsin0 <chenyihsin0@gmail.com>
 subject:    FW: pictures
 date:       Tue, 18 Oct 2022 12:13:26 
 in:         Personal
+label:      YiHsin
+label:      IMPORTANT
+label:      CATEGORY_PERSONAL
 body:       Sent from my T-Mobile 4G LTE Device
 -------- Original message --------From: Derek Brand <brand.derek@gmail.com> Date: 10/18/22  4:18 AM  (GMT-10:00) To: YiHsin Chen <chenyihsin0@gmail.com>, Brand <czechist@optonline.net> Subject: pictures Hi Mom, attached are the pictures from the revolutionary council in Paris
 
