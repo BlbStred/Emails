@@ -11,8 +11,8 @@ import my
 if __name__ == "__main__":
     numFailed = 0
     
-    numFailed += my.regression("Search")
     numFailed += my.regression("SocialEmailsAgent")    
+    numFailed += my.regression("Search")
 
     print("%2d tests failed" % numFailed)
 
