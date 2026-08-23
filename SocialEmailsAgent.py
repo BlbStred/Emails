@@ -40,8 +40,9 @@ class EmailId:
     
     def processed(self, emailId):
         if self.prevId == None:
-            # first time processed() called, whuch is the most recent id
-            # remember it, and record it in file
+            # First time processed() is called -- which makes emailId is the most recent id.
+            # Store the id from the file in prevId for comparison with incoming ones, and
+            # record the given emailId in the file
             try:
                 with open(self.fileName, "r") as file:
                     self.prevId = file.readline().split()[0]
@@ -53,6 +54,8 @@ class EmailId:
             """
         return emailId == self.prevId
 
+
+    
 # Create the services for each category of interest,
 # and save them in a dictionary
 
@@ -70,8 +73,8 @@ idService = {'promotions': EmailId('promotions'),
 gmailService = GmailService.GmailService()
 
 # getEmailList() returns a list of messages of interest.
-# It uses gmail query filter to decide which messages are of interest
-# In addition, this is my specific filter of message ids.
+# It uses gmail query filter to decide which messages are of interest.
+# In addition, below is my specific filter of message ids.
 
 class Wanted:
     # idService allows us to check whether an email id has been processed in previous days
