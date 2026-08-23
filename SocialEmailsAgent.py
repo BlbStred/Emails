@@ -166,13 +166,18 @@ def socialEmails(emailList, relevance):
 
 @my.timeit
 def mymain():
-    
-    emails =  (getEmailList('promotions') +
-               getEmailList('social')     +
-               getEmailList('updates'))
-    
-    GmailService.sendEmail("Social emails",
-                           socialEmails(emails, aiService.relevance))
+
+    # list of messages from wanted categories
+    parsedMessages =  (getEmailList('promotions') +
+                       getEmailList('social')     +
+                       getEmailList('updates'))
+
+    # Collect all the parsedMessages into one email, and catagorize them using AI
+    report = socialEmails(parsedMessages, aiService.emailRelevance)
+
+    # Send the report to myself
+    GmailService.sendEmail("Social emails", report)
+                           
     
 
 
