@@ -19,6 +19,15 @@
 # 2.1 go to myaccount.google.com/apppasswords
 
 import sys
+import os
+import smtplib
+from google.oauth2.credentials import Credentials
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from dotenv import load_dotenv # run 'pip install python-dotenv'
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from pathlib import Path
 
 commonDir = "C:\\Users\\Dan\\Documents\\Computing\\common"
@@ -27,12 +36,7 @@ if commonDir not in sys.path:
 
 import my
 
-import os
-from google.oauth2.credentials import Credentials
-from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
-from dotenv import load_dotenv # run 'pip install python-dotenv'
+
 
 class GmailService:
     
@@ -146,4 +150,38 @@ class GmailService:
         return messages
     
 
+
+
+
+# Format the summary email and send it to myself
+def sendEmail(subject, body):
+    print()
+    print("Subject:", subject)
+    print("Body:", body)
+    
+
+    # Setup the summary email
+    msg = MIMEMultipart("alternative")
+    msg['From']    = os.environ.get("MY_GMAIL_ADDRESS")
+    msg['To']      = os.environ.get("MY_GMAIL_ADDRESS")
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(body, 'html', 'utf-8'))
+
+
+    try:
+        # --- Connecting to Server ---
+        # For Gmail: smtp.gmail.com | Port: 587
+        # For Outlook: smtp.office365.com | Port: 587
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()  # Secure the connection
+        server.login(os.environ.get("MY_GMAIL_ADDRESS"),
+                     os.environ.get("MY_GMAIL_APP_PASSWORD"))  # App Password, not login password
+        server.send_message(msg)
+        
+    except Exception as e:
+        print(f"*** Error *** : {e}")
+    
+    finally:
+        server.quit()
 
