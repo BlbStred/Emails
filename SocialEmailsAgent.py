@@ -27,12 +27,12 @@ my.init()
 class EmailId:
 
     def __init__(self, category):
-        self.prevId   = None                       # the most recent id already processed previously
+        self.prevId   = None                       # the most recent id already processed before
         self.fileName = "latest_"+category+".txt"  # where saved
 
-    # First time processed() invoked, it will be with the most recent emailId
+    # First time processed() is invoked, it will be with the most recent emailId.
     # Save the previous one from fileName in self.prevId
-    # Store that new given emailId in the file
+    # Store that new given emailId in the file.
 
     
     def processed(self, emailId):
@@ -160,6 +160,8 @@ def socialEmails(emailList, relevance):
        </html>
        """
       )      
+
+
 
 
 @my.timeit
