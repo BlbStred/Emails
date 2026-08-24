@@ -135,7 +135,7 @@ def socialEmails(emailList, relevance):
                 </a><br>
         """
 
-        match relevance(e.subject):
+        match relevance(e.subject, e.bodies):
             case 'YES':    relevant += ref; numRelevant   += 1
             case 'NO':   irrelevant += ref; numIrrelevant += 1
             case 'UNSURE': unsure   += ref; numUnsure     += 1                
