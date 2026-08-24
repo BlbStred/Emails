@@ -121,11 +121,13 @@ aiService  = AIservice.AIservice()
 def socialEmails(emailList, relevance):
 
     relevant      = "<p>RELEVANT EMAILS:<br>"
-    unsure        = "<p>UNSURE ABOUT:<br>"        
     irrelevant    = "<p>IRRELEVANT EMAILS:<br>"
+    unsure        = "<p>UNSURE ABOUT:<br>"
+    failed        = "<p>FAILED:<br>"            
     numRelevant   = 0
     numIrrelevant = 0
-    numUnsure     = 0    
+    numUnsure     = 0
+    numFailed     = 0        
     
     for e in emailList:
 
@@ -138,23 +140,26 @@ def socialEmails(emailList, relevance):
         match relevance(e.subject, e.bodies):
             case 'YES':    relevant += ref; numRelevant   += 1
             case 'NO':   irrelevant += ref; numIrrelevant += 1
-            case 'UNSURE': unsure   += ref; numUnsure     += 1                
+            case 'UNSURE': unsure   += ref; numUnsure     += 1
+            case 'FAILED': failed   += ref; numFailed     += 1                            
             case _:        print("*** ERROR *** : Unknown relevance:", relevance(e.subject))
 
     # Avoid displaying empty lists
     if numRelevant   == 0: relevant   = ""
     if numIrrelevant == 0: irrelevant = ""
-    if numUnsure     == 0: unsure     = ""        
+    if numUnsure     == 0: unsure     = ""
+    if numFailed     == 0: failed     = ""            
 
     return (
         f"""
         <html>
           <body>
             Received {numRelevant} relevant, {numIrrelevant} irrelevant social emails,
-            and unsure about {numUnsure}.
+            unsure about {numUnsure}, and failed on {numFailed}.
             {relevant}
             {unsure}
             {irrelevant}
+            {failed}        
             </p>
          </body>
        </html>
